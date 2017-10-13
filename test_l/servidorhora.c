@@ -44,8 +44,9 @@ void main(int args,char * argv[]){
 			break;
 		}
 		c=strlen(sbuf);
-		sbuf[c] = '\0';
-		sendto(sd, sbuf ,c, 0 , (struct sockaddr *) &cli, clen);
+		sbuf[c] = '\n';
+		sbuf[c+1]='\0';
+		sendto(sd, sbuf ,c+1, 0 , (struct sockaddr *) &cli, clen);
 	}
 	close(sd);
 }
