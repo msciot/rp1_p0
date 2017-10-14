@@ -3,10 +3,8 @@
 # This script needs to be executed as root
 # It has the only purpuse os stablish basic LAN ipv4
 
-connection=fe80::219:f5ff:fe89:1236
 
 NETWORK=10.9.9.1
-LEASE=10.9.9.9
 DEVICE=enp0s20f0u1
 
 if [ -d /sys/class/net/$DEVICE ]; then
@@ -18,27 +16,32 @@ else
    exit
 fi
 
-ssh -6 root@$connection%$DEVICE "ip address add $LEASE/24 dev eth0"
-ssh -6 root@$connection%$DEVICE "ip route add default via $NETWORK"
-
-
 # dhcpd configuration:
 
-#ACTIVATE=false
-#if diff -u /etc/dhcpcd.conf dhcpd.example > /dev/null; then
-#    ACTIVATE=true
-#else
-#    if ps ax | grep -v grep | grep "dhcpcd"; then
-#        echo "dhcpd server is running"
-#        systemctl stop dhcpcd.service
-#        ACTIVATE=true
-#    fi
-#    mv /etc/dhcpcd.conf /etc/dhcpcd.con.orig
-#    mv dhcpd.example /etc/dhcpcd.conf
-#fi
-#
-#if [ $ACTIVATE ]; then
-#    systemctl start dhcpcd.service
-#fi
+ACTIVATE=false
+if diff -u /etc/dhcpd.conf dhcpd.example > /dev/null; then
+    ACTIVATE=true
+else
+    if ps ax | grep -v grep | grep "dhcpcd"; then
+        echo "dhcpd server is running"
+        systemctl stop dhcpd4.service
+        ACTIVATE=true
+    fi
+    mv /etc/dhcpd.conf /etc/dhcpd.con.orig
+    cp dhcpd.example /etc/dhcpd.conf
+fi
+
+if [ $ACTIVATE ]; then
+    systemctl start dhcpd4.service
+fi
+
+# manual dhcp throw ipv6 automatic addressing
+
+#LEASE=10.9.9.9
+#connection=fe80::219:f5ff:fe89:1236
+#ssh -6 root@$connection%$DEVICE "ip address add $LEASE/24 dev eth0"
+#ssh -6 root@$connection%$DEVICE "ip route add default via $NETWORK"
+
+
 
 
