@@ -1,0 +1,42 @@
+
+config globals 'globals'
+	option ula_prefix 'fd77:b257:3af7::/48'
+
+config interface 'loopback'
+	option ifname 'lo'
+	option proto 'static'
+	option ipaddr '127.0.0.1'
+	option netmask '255.0.0.0'
+
+config interface 'wan'
+	option ifname 'eth0'
+	option proto 'dhcp'
+
+config interface 'wan6'
+	option ifname 'eth0'
+	option proto 'dhcpv6'
+
+config interface 'lan'
+	option proto 'static'
+	option dhcpv6 'server'
+	option ra 'server'
+	option ipaddr '172.16.0.1'
+	option netmask '255.240.0.0'
+
+config interface 'nat64'
+	option proto 'tayga'
+	option ifname 'tayga-nat64'
+	option ipv4_addr '192.168.255.1'
+	option prefix 'fd36:aa9:278:64::/96'
+	option dynamic_pool '192.168.255.0/24'
+	option accept_ra '0'
+	option send_rs '0'
+
+config interface 'wpan'
+	option ifname 'lowpan0'
+	option proto 'lowpan'
+	option channel '26'
+	option pan_id '0xabcd'
+	option dhcpv6 'server'
+	option ra 'server'
+
