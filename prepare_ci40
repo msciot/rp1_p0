@@ -1,14 +1,44 @@
 #!/bin/bash
 
 # This script needs to be executed as root
+# It has the only purpuse os stablish basic LAN ipv4
 
+connection=fe80::219:f5ff:fe89:1236
+
+NETWORK=10.9.9.1
+LEASE=10.9.9.9
 DEVICE=enp0s20f0u1
+
 if [ -d /sys/class/net/$DEVICE ]; then
     /usr/bin/ip link set $DEVICE up
-    /usr/bin/ip add add 10.9.9.1/24 dev $DEVICE
+    /usr/bin/ip add add $NETWORK/24 dev $DEVICE
     echo "1" > /proc/sys/net/ipv4/ip_forward
 else
    echo "there are some problems with your device!"
    exit
 fi
+
+ssh -6 root@$connection%$DEVICE "ip address add $LEASE/24 dev eth0"
+ssh -6 root@$connection%$DEVICE "ip route add default via $NETWORK"
+
+
+# dhcpd configuration:
+
+#ACTIVATE=false
+#if diff -u /etc/dhcpcd.conf dhcpd.example > /dev/null; then
+#    ACTIVATE=true
+#else
+#    if ps ax | grep -v grep | grep "dhcpcd"; then
+#        echo "dhcpd server is running"
+#        systemctl stop dhcpcd.service
+#        ACTIVATE=true
+#    fi
+#    mv /etc/dhcpcd.conf /etc/dhcpcd.con.orig
+#    mv dhcpd.example /etc/dhcpcd.conf
+#fi
+#
+#if [ $ACTIVATE ]; then
+#    systemctl start dhcpcd.service
+#fi
+
 
