@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# This script needs to be executed as root
+
+DEVICE=enp0s20f0u1
+if [ -d /sys/class/net/$DEVICE ]; then
+    /usr/bin/ip link set $DEVICE up
+    /usr/bin/ip add add 10.9.9.1/24 dev $DEVICE
+    echo "1" > /proc/sys/net/ipv4/ip_forward
+else
+   echo "there are some problems with your device!"
+   exit
+fi
+
