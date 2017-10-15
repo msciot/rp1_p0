@@ -5,7 +5,7 @@
 
 
 NETWORK=10.9.9.1
-DEVICE=enp0s20f0u1
+DEVICE=$1
 
 if [ -d /sys/class/net/$DEVICE ]; then
     /usr/bin/ip link set $DEVICE up
