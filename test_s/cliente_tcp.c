@@ -51,12 +51,12 @@ int main (int argc, char *argv[])
 
         while(1){
 
+            memset (send_buff, '\0', MAXDATASIZE - ID_HEADER_LEN); /* Pone a cero el buffer inicialmente */
             if ((len = read(0, send_buff, MAXDATASIZE - ID_HEADER_LEN)) == -1){
                 perror("(cliente) error input");
                 exit(1);
             }
-
-            send_buff[len]='\0';
+            send_buff[len] = '\0';
 
             if (send_buff[0] == 'q')
                 break;
