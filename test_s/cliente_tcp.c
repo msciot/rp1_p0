@@ -7,9 +7,9 @@
 
 int main (int argc, char *argv[])
 {
-        int sockfd;                     /* conexion sobre sockfd */
-        char buf[MAXDATASIZE];          /* buffer de recepcion */
-        char send_buff[MAXDATASIZE];          /* buffer de recepcion */
+        int sockfd;                                           /* conexion sobre sockfd */
+        char buf[MAXDATASIZE];                                /* buffer de recepcion */
+        char send_buff[MAXDATASIZE - ID_HEADER_LEN];          /* buffer de recepcion */
         struct sockaddr_in their_addr;  /* informacion de la direccion del servidor */
         struct appdata operation;       /* mensaje de operacion enviado */
         struct appdata resultado;       /* mensaje de respuesta recibido */
@@ -51,10 +51,13 @@ int main (int argc, char *argv[])
 
         while(1){
 
-            if ((len = read(0, send_buff, MAXDATASIZE)) == -1){
+            if ((len = read(0, send_buff, MAXDATASIZE - ID_HEADER_LEN)) == -1){
                 perror("(cliente) error input");
                 exit(1);
             }
+
+            send_buff[len]='\0';
+
             if (send_buff[0] == 'q')
                 break;
 
