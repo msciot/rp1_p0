@@ -1,0 +1,17 @@
+06:09:42.403262 IP 192.168.1.91.22 > 192.168.1.1.50124: Flags [P.], seq 1212118831:1212119027, ack 3353901406, win 157, options [nop,nop,TS val 254246 ecr 2248401259], length 196
+06:09:42.414340 IP 192.168.1.1.50124 > 192.168.1.91.22: Flags [.], ack 196, win 1444, options [nop,nop,TS val 2248401584 ecr 254246], length 0
+06:09:42.560973 IP 192.168.1.91.443 > 192.168.1.1.58448: Flags [P.], seq 1898033300:1898033417, ack 1806731126, win 666, options [nop,nop,TS val 254262 ecr 2248401551], length 117
+06:09:42.562079 IP 192.168.1.91.443 > 192.168.1.1.58448: Flags [.], seq 117:1565, ack 1, win 666, options [nop,nop,TS val 254262 ecr 2248401551], length 1448
+06:09:42.563098 IP 192.168.1.1.58448 > 192.168.1.91.443: Flags [.], ack 117, win 1444, options [nop,nop,TS val 2248401624 ecr 254262], length 0
+06:09:42.563309 IP 192.168.1.91.443 > 192.168.1.1.58448: Flags [P.], seq 1565:2093, ack 1, win 666, options [nop,nop,TS val 254262 ecr 2248401624], length 528
+06:09:42.564012 IP 192.168.1.1.58448 > 192.168.1.91.443: Flags [.], ack 1565, win 1444, options [nop,nop,TS val 2248401624 ecr 254262], length 0
+06:09:42.573649 IP 192.168.1.1.58448 > 192.168.1.91.443: Flags [.], ack 2093, win 1444, options [nop,nop,TS val 2248401624 ecr 254262], length 0
+06:09:42.581789 IP 192.168.1.91.443 > 192.168.1.1.58448: Flags [P.], seq 2093:2146, ack 1, win 666, options [nop,nop,TS val 254264 ecr 2248401624], length 53
+06:09:42.583416 IP 192.168.1.1.58448 > 192.168.1.91.443: Flags [.], ack 2146, win 1444, options [nop,nop,TS val 2248401629 ecr 254264], length 0
+06:09:43.579409 IP 192.168.1.91.443 > 192.168.1.1.58448: Flags [.], ack 1, win 666, options [nop,nop,TS val 254364 ecr 2248401629], length 0
+06:09:43.581174 IP 192.168.1.1.58448 > 192.168.1.91.443: Flags [.], ack 2146, win 1444, options [nop,nop,TS val 2248401878 ecr 254264], length 0
+06:09:44.579377 IP 192.168.1.91.443 > 192.168.1.1.58448: Flags [.], ack 1, win 666, options [nop,nop,TS val 254464 ecr 2248401878], length 0
+06:09:44.582930 IP 192.168.1.1.58448 > 192.168.1.91.443: Flags [.], ack 2146, win 1444, options [nop,nop,TS val 2248402129 ecr 254264], length 0
+06:09:45.579366 IP 192.168.1.91.443 > 192.168.1.1.58448: Flags [.], ack 1, win 666, options [nop,nop,TS val 254564 ecr 2248402129], length 0
+06:09:45.582802 IP 192.168.1.1.58448 > 192.168.1.91.443: Flags [.], ack 2146, win 1444, options [nop,nop,TS val 2248402378 ecr 254264], length 0
+
