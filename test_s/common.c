@@ -1,5 +1,13 @@
 #include "common.h"
 
+
+void pp(char * input){
+    char *output[strlen(input) + 3];
+
+    sprintf(output,"\n%s\n",input);
+    printf("%s", output);
+}
+
 /**
  * Recepcion de n bytes
  */
@@ -41,4 +49,22 @@ int writen(int fd, const void *vptr, size_t n)
                 ptr += nwritten;
         }
         return (n);
+}
+
+unsigned short cdata_to_op(char * cdata)
+{
+    if (strcmp(cdata, "get") == 0) { // match!
+        pp("get");
+    }
+    else if (strcmp(cdata, "put") == 0) { // not matche
+        pp("put");
+    }
+    else if (strcmp(cdata, "rm") == 0) { // not matche
+        pp("rm");
+    }
+    else if (strcmp(cdata, "ls") == 0) { // not matche
+        puts("else");
+    }
+
+    return 0;
 }

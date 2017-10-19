@@ -10,6 +10,8 @@ int main (int argc, char *argv[])
         int sockfd;                                           /* conexion sobre sockfd */
         char buf[MAXDATASIZE];                                /* buffer de recepcion */
         char send_buff[MAXDATASIZE - ID_HEADER_LEN];          /* buffer de recepcion */
+        char rop[READOP];
+        char ftp_argv[BYTEPARAM];
         struct sockaddr_in their_addr;  /* informacion de la direccion del servidor */
         struct appdata operation;       /* mensaje de operacion enviado */
         struct appdata resultado;       /* mensaje de respuesta recibido */
@@ -51,21 +53,30 @@ int main (int argc, char *argv[])
 
         while(1){
 
-            memset (send_buff, '\0', MAXDATASIZE - ID_HEADER_LEN); /* Pone a cero el buffer inicialmente */
+            memset (send_buff, '\0', MAXDATASIZE); /* Pone a cero el buffer inicialmente */
+
+
+            // read stdin 4 any operation + args
             if ((len = read(0, send_buff, MAXDATASIZE - ID_HEADER_LEN)) == -1){
                 perror("(cliente) error input");
                 exit(1);
             }
-            send_buff[len] = '\0';
+            // will be deprecated
+            if (send_buff[0] == 'q') break;
 
-            if (send_buff[0] == 'q')
-                break;
+            //read from the stdin buffer, gets two pointers to char
+            sscanf(send_buff,"%s %s", rop, ftp_argv);
+            printf("processing: %s %s",rop, ftp_argv);
+
+            cdata_to_op(rop);
 
             /* envia mensaje de operacion al servidor */
             operation.op = htons(OP_PUT);   /* op */
             strcpy(operation.data, send_buff);  /* data */
             len = strlen (operation.data);
+            operation.data[len] = '\0';
             operation.len = htons(len);  /* len */
+
             if ((numbytes = write (sockfd, (char *) &operation, len + HEADER_LEN)) == -1)
                     perror ("write");
             else

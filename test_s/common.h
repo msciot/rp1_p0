@@ -18,6 +18,9 @@
 
 #define MAXDATASIZE 256 /* maximo numero de bytes que podemos recibir */
 
+#define READOP 4
+#define BYTEPARAM (MAXDATASIZE - HEADER_LEN) - READOP
+
 #define HEADER_LEN (sizeof(unsigned short) * 2)
 
 /* formato de la unidad de datos de aplicacion para Stream*/
@@ -48,3 +51,7 @@ struct idappdata
 
 unsigned short cdata_to_op(char * cdata);
 char *op_to_cdata(unsigned short op);
+
+
+/* HELPERS */
+void pp(char * input);
