@@ -51,20 +51,73 @@ int writen(int fd, const void *vptr, size_t n)
         return (n);
 }
 
+int process_op(struct appdata operation, struct appdata *result){
+    result->op = htons(OP_RES); /* op */
+    int len;
+    int error;
+
+    switch (operation.op)
+    {
+        case OP_PUT: /* minusculas */
+
+                len = 0;
+                pp("estoy en put");
+                result->len = htons(len); /* len */
+                error = 0;
+
+                break;
+        case OP_GET: /* mayusculas */
+                len = 0;
+                pp("estoy en get");
+                result->len = htons(len); /* len */
+                error = 0;
+
+                break;
+        case OP_RM: /* mayusculas */
+
+                len = 0;
+                pp("estoy en rm");
+                result->len = htons(len); /* len */
+                error = 0;
+
+                break;
+        default: /* operacion desconocida */
+
+                result->op = htons(OP_ERR); /* op */
+                strcpy(result->data, "Operacion desconocida");  /* data */
+                len = strlen (result->data);
+                result->len = htons(len);  /* len */
+                error = 1;
+
+                break;
+    }
+    return error;
+}
+
 unsigned short cdata_to_op(char * cdata)
 {
+    unsigned short op;
+
     if (strcmp(cdata, "get") == 0) { // match!
-        pp("get");
+        pp("performing get operation");
+        op = OP_GET;
     }
     else if (strcmp(cdata, "put") == 0) { // not matche
-        pp("put");
+        pp("performing put operation");
+        op = OP_PUT;
     }
     else if (strcmp(cdata, "rm") == 0) { // not matche
-        pp("rm");
+        pp("performing rm operation");
+        op = OP_RM;
     }
     else if (strcmp(cdata, "ls") == 0) { // not matche
-        puts("else");
+        pp("performing ls operation");
+        op = OP_LS;
+    }
+    else {
+        pp ("error!");
+        op= OP_ERR;
     }
 
-    return 0;
+    return op;
 }

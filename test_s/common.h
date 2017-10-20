@@ -46,12 +46,13 @@ struct idappdata
 #define OP_GET           0x0001  /* GET  */
 #define OP_PUT           0x0002  /* PUT */
 #define OP_RM            0x0003  /* RM */
+#define OP_LS            0x0004  /* RM */
 #define OP_RES           0x1000  /* RES */
 #define OP_ERR           0xFFFF  /* ERR */
 
 unsigned short cdata_to_op(char * cdata);
 char *op_to_cdata(unsigned short op);
-void process_op(unsigned short op);
+int process_op(struct appdata operation, struct appdata *result);
 
 
 /* HELPERS */

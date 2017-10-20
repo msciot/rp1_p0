@@ -68,10 +68,9 @@ int main (int argc, char *argv[])
             sscanf(send_buff,"%s %s", rop, ftp_argv);
             printf("processing: %s %s",rop, ftp_argv);
 
-            cdata_to_op(rop);
 
             /* envia mensaje de operacion al servidor */
-            operation.op = htons(OP_PUT);   /* op */
+            operation.op = htons(cdata_to_op(rop));   /* op */
             strcpy(operation.data, ftp_argv);  /* data */
             len = strlen (operation.data);
             operation.data[len] = '\0';
