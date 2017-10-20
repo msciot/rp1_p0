@@ -72,7 +72,7 @@ int main (int argc, char *argv[])
 
             /* envia mensaje de operacion al servidor */
             operation.op = htons(OP_PUT);   /* op */
-            strcpy(operation.data, send_buff);  /* data */
+            strcpy(operation.data, ftp_argv);  /* data */
             len = strlen (operation.data);
             operation.data[len] = '\0';
             operation.len = htons(len);  /* len */

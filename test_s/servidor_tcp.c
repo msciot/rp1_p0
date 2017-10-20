@@ -81,7 +81,7 @@ int main (int argc, char* argv[])
                             printf ("(server) cabecera de la unidad de datos recibida de manera incompleta "
                                     "[longitud esperada %d longitud recibida %d]",
                                     HEADER_LEN, numbytes);
-                            continue;
+                            break;
                     }
 
                     /* tenemos el tipo de operacion y la longitud */

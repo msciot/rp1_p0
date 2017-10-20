@@ -51,6 +51,7 @@ struct idappdata
 
 unsigned short cdata_to_op(char * cdata);
 char *op_to_cdata(unsigned short op);
+void process_op(unsigned short op);
 
 
 /* HELPERS */
