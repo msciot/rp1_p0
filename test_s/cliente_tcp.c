@@ -6,7 +6,7 @@
 #define PUERTO_REMOTO PUERTO      /* puerto remoto en el servidor al que conecta el cliente */
 
 int process_client_res(struct appdata response, char *aux);
-int process_client_op(struct appdata operation);
+int process_client_op(struct appdata *operation, char *op, char *arg_ftp);
 
 int main (int argc, char *argv[])
 {
@@ -70,22 +70,7 @@ int main (int argc, char *argv[])
 
             //read from the stdin buffer, gets two pointers to char
             sscanf(send_buff,"%s %s", rop, ftp_argv);
-            printf("processing: %s %s",rop, ftp_argv);
-
-
-            /* envia mensaje de operacion al servidor */
-            op = cdata_to_op(rop);
-
-
-
-
-            operation.op = htons(op);   /* op */
-
-            strcpy(operation.data, ftp_argv);  /* data */
-
-            len = strlen (operation.data);
-            operation.data[len] = '\0';
-            operation.len = htons(len);  /* len */
+            len = process_client_op(&operation ,rop, ftp_argv);
 
             if ((numbytes = write (sockfd, (char *) &operation, len + HEADER_LEN)) == -1)
                     perror ("write");
@@ -141,8 +126,33 @@ int main (int argc, char *argv[])
         return 0;
 }
 
-int process_client_op(struct appdata operation){
-    return 0;
+int process_client_op(struct appdata *operation, char *rop, char *arg_ftp){
+    /* envia mensaje de operacion al servidor */
+    char buff[MAXDATASIZE-HEADER_LEN];
+    unsigned short op = cdata_to_op(rop);
+    int len = 0;
+    switch (op)
+    {
+        case OP_GET:
+            strcpy(operation->data, arg_ftp);  /* data */
+            len = strlen (operation->data);
+            break;
+        case OP_PUT:
+            len = read_file(arg_ftp, buff);
+            strcpy(operation->data, buff);
+            break;
+        case OP_RM:
+            strcpy(operation->data, arg_ftp);  /* data */
+            len = strlen (operation->data);
+            break;
+    }
+
+
+    operation->data[len] = '\0';
+    operation->op = htons(op);   /* op */
+    operation->len = htons(len);  /* len */
+
+    return len;
 }
 
 int process_client_res(struct appdata response, char *aux){
