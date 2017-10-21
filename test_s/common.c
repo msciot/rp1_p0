@@ -111,11 +111,10 @@ int process_op(struct appdata operation, struct appdata *result){
     int len;
     int error;
 
-    result->op = htons(OP_RES); /* op */
     switch (operation.op)
     {
         case OP_PUT: /* minusculas */
-
+                result->op = htons(OP_RPUT); /* op */
                 len = 0;
                 pp("estoy en put");
                 result->len = htons(len); /* len */
@@ -124,6 +123,7 @@ int process_op(struct appdata operation, struct appdata *result){
                 break;
         case OP_GET: /* mayusculas */
                 pp("estoy en get");
+                result->op = htons(OP_RGET); /* op */
                 len = read_file(operation.data, buff);
                 printf("\n tengo esta longitud %d\n", len);
                 strcpy(result->data, buff);
@@ -132,6 +132,7 @@ int process_op(struct appdata operation, struct appdata *result){
                 break;
         case OP_RM: /* mayusculas */
 
+                result->op = htons(OP_RES); /* op */
                 len = 0;
                 pp("estoy en rm");
                 result->len = htons(len); /* len */

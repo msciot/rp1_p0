@@ -48,6 +48,9 @@ struct idappdata
 #define OP_RM            0x0003  /* RM */
 #define OP_LS            0x0004  /* RM */
 #define OP_RES           0x1000  /* RES */
+#define OP_RPUT          0x1002  /* RES */
+#define OP_RGET          0x1001  /* RES */
+
 #define OP_ERR           0xFFFF  /* ERR */
 
 unsigned short cdata_to_op(char * cdata);

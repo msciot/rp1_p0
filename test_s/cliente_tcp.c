@@ -5,7 +5,8 @@
 
 #define PUERTO_REMOTO PUERTO      /* puerto remoto en el servidor al que conecta el cliente */
 
-int process_client_op(unsigned short op, struct appdata response, char *aux);
+int process_client_res(struct appdata response, char *aux);
+int process_client_op(struct appdata operation);
 
 int main (int argc, char *argv[])
 {
@@ -74,8 +75,14 @@ int main (int argc, char *argv[])
 
             /* envia mensaje de operacion al servidor */
             op = cdata_to_op(rop);
+
+
+
+
             operation.op = htons(op);   /* op */
+
             strcpy(operation.data, ftp_argv);  /* data */
+
             len = strlen (operation.data);
             operation.data[len] = '\0';
             operation.len = htons(len);  /* len */
@@ -125,7 +132,7 @@ int main (int argc, char *argv[])
                             "[res 0x%x longitud %d contenido %s]\n",
                             result.op, result.len, result.data);
 
-            process_client_op(op, result, ftp_argv);
+            process_client_res(result, ftp_argv);
         }
         /* cierra el socket */
         close (sockfd);
@@ -134,14 +141,18 @@ int main (int argc, char *argv[])
         return 0;
 }
 
-int process_client_op(unsigned short op, struct appdata response, char *aux){
+int process_client_op(struct appdata operation){
+    return 0;
+}
+
+int process_client_res(struct appdata response, char *aux){
     int error = 0;
-    switch (op)
+    switch (response.op)
     {
-        case OP_PUT: /* minusculas */
+        case OP_RPUT: /* minusculas */
             pp("cliente put");
             break;
-        case OP_GET: /* mayusculas */
+        case OP_RGET: /* mayusculas */
             write_file(aux, response.data, response.len);
 
             break;
