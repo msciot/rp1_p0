@@ -51,11 +51,65 @@ int writen(int fd, const void *vptr, size_t n)
         return (n);
 }
 
+
+/* FTP INTERFACE
+ */
+int read_file(char * file_name, char *output){
+    char rbuf[CHUNK];
+    FILE *file;
+    size_t nread;
+    int size = 0;
+
+    file = fopen(file_name, "r");
+
+    //read file using CHUNKS
+    if (file != NULL) {
+        while ((nread = fread(rbuf, 1, sizeof rbuf, file)) > 0){
+            //fwrite(rbuf, 1, nread, stdout);
+            memcpy(output, rbuf, nread);
+            output+=nread;
+            size+=nread;
+        }
+
+        if (ferror(file))
+            pp("ERROR READING FILE");
+    }
+    fclose(file);
+    return size;
+}
+
+
+int write_file(char * file_name, char *data){
+
+    char wbuf[CHUNK];
+    FILE *file;
+    size_t nwrite;
+    int size = 0;
+
+    strcpy(wbuf, data);  /* data */
+    file = fopen(file_name, "w");
+
+    if (file != NULL){
+        while ((nwrite = fwrite(wbuf, 1, sizeof wbuf, file)) > 0){
+            size+=nwrite;
+        }
+
+        if (ferror(file))
+            pp("ERROR READING FILE");
+    }
+    return size;
+}
+
+
+/**/
+
+
 int process_op(struct appdata operation, struct appdata *result){
-    result->op = htons(OP_RES); /* op */
+    char buff[MAXDATASIZE-HEADER_LEN];
     int len;
     int error;
 
+    result->op = htons(OP_RES); /* op */
     switch (operation.op)
     {
         case OP_PUT: /* minusculas */
@@ -67,11 +121,12 @@ int process_op(struct appdata operation, struct appdata *result){
 
                 break;
         case OP_GET: /* mayusculas */
-                len = 0;
                 pp("estoy en get");
+                len = read_file(operation.data, buff);
+                printf("\n tengo esta longitud %d\n", len);
+                strcpy(result->data, buff);
                 result->len = htons(len); /* len */
                 error = 0;
-
                 break;
         case OP_RM: /* mayusculas */
 

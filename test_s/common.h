@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
 #include <errno.h>
 #include <string.h>
 #include <sys/types.h>
@@ -16,7 +15,8 @@
 
 #define BACKLOG 10      /* numero maximo de conexiones pendientes en cola */
 
-#define MAXDATASIZE 256 /* maximo numero de bytes que podemos recibir */
+#define MAXDATASIZE 1024 /* maximo numero de bytes que podemos recibir */
+#define CHUNK 512
 
 #define READOP 4
 #define BYTEPARAM (MAXDATASIZE - HEADER_LEN) - READOP
@@ -53,6 +53,8 @@ struct idappdata
 unsigned short cdata_to_op(char * cdata);
 char *op_to_cdata(unsigned short op);
 int process_op(struct appdata operation, struct appdata *result);
+int read_file(char * file_name, char * output);
+int write_file(char * file_name, char *data);
 
 
 /* HELPERS */

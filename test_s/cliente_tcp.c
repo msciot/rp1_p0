@@ -5,6 +5,8 @@
 
 #define PUERTO_REMOTO PUERTO      /* puerto remoto en el servidor al que conecta el cliente */
 
+int process_client_op(unsigned short op, struct appdata response, char *aux);
+
 int main (int argc, char *argv[])
 {
         int sockfd;                                           /* conexion sobre sockfd */
@@ -14,7 +16,8 @@ int main (int argc, char *argv[])
         char ftp_argv[BYTEPARAM];
         struct sockaddr_in their_addr;  /* informacion de la direccion del servidor */
         struct appdata operation;       /* mensaje de operacion enviado */
-        struct appdata resultado;       /* mensaje de respuesta recibido */
+        struct appdata result;       /* mensaje de respuesta recibido */
+        unsigned short op;
         int numbytes;                   /* numero de bytes recibidos o enviados */
         int len;
 
@@ -70,7 +73,8 @@ int main (int argc, char *argv[])
 
 
             /* envia mensaje de operacion al servidor */
-            operation.op = htons(cdata_to_op(rop));   /* op */
+            op = cdata_to_op(rop);
+            operation.op = htons(op);   /* op */
             strcpy(operation.data, ftp_argv);  /* data */
             len = strlen (operation.data);
             operation.data[len] = '\0';
@@ -99,29 +103,53 @@ int main (int argc, char *argv[])
             }
 
             /* tenemos el tipo de respuesta y la longitud */
-            resultado.op = ntohs((*((unsigned short *)(buf))));
-            resultado.len = ntohs((*((unsigned short *)(buf + sizeof(unsigned short)))));
-            memset (resultado.data, '\0', MAXDATASIZE - HEADER_LEN);
+            result.op = ntohs((*((unsigned short *)(buf))));
+            result.len = ntohs((*((unsigned short *)(buf + sizeof(unsigned short)))));
+            memset (result.data, '\0', MAXDATASIZE - HEADER_LEN);
 
-            if ((numbytes = read (sockfd, resultado.data, resultado.len)) == -1) /* leemos los datos */
+
+            if ((numbytes = read (sockfd, result.data, result.len)) == -1) /* leemos los datos */
             {
                     perror ("read");
                     exit (1);
             }
             printf ("(cliente) mensaje recibido del servidor [longitud %d]\n", numbytes + HEADER_LEN);
 
-            if (numbytes != resultado.len) /* comprueba el número de bytes recibidos */
+
+            if (numbytes != result.len) /* comprueba el número de bytes recibidos */
                     printf ("(cliente) datos de la unidad de datos recibida de manera incompleta "
                             "[longitud esperada %d longitud recibida %d]",
-                            resultado.len, numbytes);
+                            result.len, numbytes);
             else
-                    printf ("(cliente) resultado de la operacion solicitada" 
+                    printf ("(cliente) result de la operacion solicitada" 
                             "[res 0x%x longitud %d contenido %s]\n",
-                            resultado.op, resultado.len, resultado.data);
+                            result.op, result.len, result.data);
+
+            process_client_op(op, result, ftp_argv);
         }
         /* cierra el socket */
         close (sockfd);
         printf ("(cliente) conexion cerrada con servidor\n");
 
         return 0;
+}
+
+int process_client_op(unsigned short op, struct appdata response, char *aux){
+    int error = 0;
+    switch (op)
+    {
+        case OP_PUT: /* minusculas */
+            pp("cliente put");
+            break;
+        case OP_GET: /* mayusculas */
+            write_file(aux, response.data);
+
+            break;
+        case OP_RM: /* mayusculas */
+            pp("cliente rm");
+            break;
+        default: /* operacion desconocida */
+            break;
+    }
+    return error;
 }

@@ -14,7 +14,7 @@ int main (int argc, char* argv[])
         char buf[MAXDATASIZE];                  /* buffer de recepcion */
         int numbytes;                           /* numero de bytes enviados o recibidos */
         struct appdata operation;               /* mensaje de operacion recibido */
-        struct appdata resultado;               /* mensaje de respuesta enviado */
+        struct appdata result;               /* mensaje de respuesta enviado */
         size_t sin_size;
         int error;
 
@@ -105,11 +105,10 @@ int main (int argc, char* argv[])
                                     operation.op, operation.len, operation.data);
 
                     /* realiza operacion solicitada por el cliente */
-                    memset (resultado.data, '\0', MAXDATASIZE - HEADER_LEN);
-                    error = process_op(operation, &resultado);
-
+                    memset (result.data, '\0', MAXDATASIZE - HEADER_LEN);
+                    error = process_op(operation, &result);
                     /* envia resultado de la operacion solicitada por el cliente */
-                    if ((numbytes = write (new_fd, (char *) &resultado, resultado.len + HEADER_LEN)) == -1)
+                    if ((numbytes = write (new_fd, (char *) &result, result.len + HEADER_LEN)) == -1)
                     {
                             perror ("write");
                             continue;
@@ -119,7 +118,7 @@ int main (int argc, char* argv[])
 
                     printf ("(servidor) resultado de la operacion solicitada"
                             "[res 0x%x longitud %d contenido %s]\n",
-                            ntohs(resultado.op), resultado.len, resultado.data);
+                            ntohs(result.op), result.len, result.data);
                 }
 
                 /* cierra socket */
