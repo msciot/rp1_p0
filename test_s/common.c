@@ -64,7 +64,7 @@ int read_file(char * file_name, char *output){
 
     //read file using CHUNKS
     if (file != NULL) {
-        while ((nread = fread(rbuf, 1, sizeof rbuf, file)) > 0){
+        while ((nread = fread(rbuf, 1, CHUNK, file)) > 0){
             //fwrite(rbuf, 1, nread, stdout);
             memcpy(output, rbuf, nread);
             output+=nread;
@@ -79,7 +79,7 @@ int read_file(char * file_name, char *output){
 }
 
 
-int write_file(char * file_name, char *data){
+int write_file(char * file_name, char *data, int len){
 
     char wbuf[CHUNK];
     FILE *file;
@@ -90,13 +90,15 @@ int write_file(char * file_name, char *data){
     file = fopen(file_name, "w");
 
     if (file != NULL){
-        while ((nwrite = fwrite(wbuf, 1, sizeof wbuf, file)) > 0){
-            size+=nwrite;
-        }
+        //while ((nwrite = fwrite(wbuf, 1, sizeof wbuf, file)) > 0){
+        //    size+=nwrite;
+        //}
+        size = fwrite(wbuf, 1, len, file);
 
         if (ferror(file))
             pp("ERROR READING FILE");
     }
+    fclose(file);
     return size;
 }
 

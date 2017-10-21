@@ -54,7 +54,7 @@ unsigned short cdata_to_op(char * cdata);
 char *op_to_cdata(unsigned short op);
 int process_op(struct appdata operation, struct appdata *result);
 int read_file(char * file_name, char * output);
-int write_file(char * file_name, char *data);
+int write_file(char * file_name, char *data, int len);
 
 
 /* HELPERS */

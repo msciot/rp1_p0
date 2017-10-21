@@ -142,7 +142,7 @@ int process_client_op(unsigned short op, struct appdata response, char *aux){
             pp("cliente put");
             break;
         case OP_GET: /* mayusculas */
-            write_file(aux, response.data);
+            write_file(aux, response.data, response.len);
 
             break;
         case OP_RM: /* mayusculas */
