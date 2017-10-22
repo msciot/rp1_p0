@@ -5,6 +5,8 @@
 
 #define PUERTO_LOCAL PUERTO /* puerto local en el servidor al que se conectan los clientes */
 
+int process_server_op(struct appdata operation, struct appdata *result);
+
 int main (int argc, char* argv[])
 {
         int sockfd;                             /* escucha sobre sock_fd */
@@ -106,7 +108,7 @@ int main (int argc, char* argv[])
 
                     /* realiza operacion solicitada por el cliente */
                     memset (result.data, '\0', MAXDATASIZE - HEADER_LEN);
-                    error = process_op(operation, &result);
+                    error = process_server_op(operation, &result);
                     /* envia resultado de la operacion solicitada por el cliente */
                     if ((numbytes = write (new_fd, (char *) &result, result.len + HEADER_LEN)) == -1)
                     {
@@ -129,4 +131,50 @@ int main (int argc, char* argv[])
         close(sockfd);
 
         return 0;
+}
+
+int process_server_op(struct appdata operation, struct appdata *result){
+    char buff[MAXDATASIZE-HEADER_LEN];
+    int len;
+    int error;
+
+    switch (operation.op)
+    {
+        case OP_PUT: /* minusculas */
+                result->op = htons(OP_RPUT); /* op */
+                len = 0;
+                pp("estoy en put");
+                result->len = htons(len); /* len */
+                error = 0;
+
+                break;
+        case OP_GET: /* mayusculas */
+                pp("estoy en get");
+                result->op = htons(OP_RGET); /* op */
+                len = read_file(operation.data, buff);
+                printf("\n tengo esta longitud %d\n", len);
+                strcpy(result->data, buff);
+                result->len = htons(len); /* len */
+                error = 0;
+                break;
+        case OP_RM: /* mayusculas */
+
+                result->op = htons(OP_RES); /* op */
+                len = 0;
+                pp("estoy en rm");
+                result->len = htons(len); /* len */
+                error = 0;
+
+                break;
+        default: /* operacion desconocida */
+
+                result->op = htons(OP_ERR); /* op */
+                strcpy(result->data, "Operacion desconocida");  /* data */
+                len = strlen (result->data);
+                result->len = htons(len);  /* len */
+                error = 1;
+
+                break;
+    }
+    return error;
 }

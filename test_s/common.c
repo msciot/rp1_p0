@@ -102,55 +102,14 @@ int write_file(char * file_name, char *data, int len){
     return size;
 }
 
+int delete_file(char * file_name){
+    return 0;
+}
+
 
 /**/
 
 
-int process_op(struct appdata operation, struct appdata *result){
-    char buff[MAXDATASIZE-HEADER_LEN];
-    int len;
-    int error;
-
-    switch (operation.op)
-    {
-        case OP_PUT: /* minusculas */
-                result->op = htons(OP_RPUT); /* op */
-                len = 0;
-                pp("estoy en put");
-                result->len = htons(len); /* len */
-                error = 0;
-
-                break;
-        case OP_GET: /* mayusculas */
-                pp("estoy en get");
-                result->op = htons(OP_RGET); /* op */
-                len = read_file(operation.data, buff);
-                printf("\n tengo esta longitud %d\n", len);
-                strcpy(result->data, buff);
-                result->len = htons(len); /* len */
-                error = 0;
-                break;
-        case OP_RM: /* mayusculas */
-
-                result->op = htons(OP_RES); /* op */
-                len = 0;
-                pp("estoy en rm");
-                result->len = htons(len); /* len */
-                error = 0;
-
-                break;
-        default: /* operacion desconocida */
-
-                result->op = htons(OP_ERR); /* op */
-                strcpy(result->data, "Operacion desconocida");  /* data */
-                len = strlen (result->data);
-                result->len = htons(len);  /* len */
-                error = 1;
-
-                break;
-    }
-    return error;
-}
 
 unsigned short cdata_to_op(char * cdata)
 {
