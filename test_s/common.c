@@ -29,6 +29,14 @@ int readn(int fd, void *vptr, size_t n)
         }
         return (n - nleft);
 }
+int data(char *data){
+    int len =  strlen(data);
+    for (int i = 0; i < len; i++){
+        if (data[i] == ' ')
+            return i;
+    }
+    return 0;
+}
 
 /**
  * Envio de n bytes

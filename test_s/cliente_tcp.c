@@ -14,7 +14,7 @@ int main (int argc, char *argv[])
         char buf[MAXDATASIZE];                                /* buffer de recepcion */
         char send_buff[MAXDATASIZE - ID_HEADER_LEN];          /* buffer de recepcion */
         char rop[READOP];
-        char ftp_argv[BYTEPARAM];
+        char ftp_argv[MAXDATASIZE - HEADER_LEN];
         struct sockaddr_in their_addr;  /* informacion de la direccion del servidor */
         struct appdata operation;       /* mensaje de operacion enviado */
         struct appdata result;       /* mensaje de respuesta recibido */
@@ -128,6 +128,7 @@ int main (int argc, char *argv[])
 
 int process_client_op(struct appdata *operation, char *rop, char *arg_ftp){
     /* envia mensaje de operacion al servidor */
+    char read_buff[MAXDATASIZE-HEADER_LEN];
     char buff[MAXDATASIZE-HEADER_LEN];
     unsigned short op = cdata_to_op(rop);
     int len = 0;
@@ -138,8 +139,16 @@ int process_client_op(struct appdata *operation, char *rop, char *arg_ftp){
             len = strlen (operation->data);
             break;
         case OP_PUT:
-            len = read_file(arg_ftp, buff);
-            strcpy(operation->data, buff);
+            len = read_file(arg_ftp, read_buff);
+            arg_ftp[strlen(arg_ftp)] = ' ';
+            strcat(arg_ftp, read_buff);
+            strcpy(operation->data, arg_ftp);
+            len = strlen(operation->data);
+            int n = data(operation->data);
+              /* print at most first three characters (safe) */
+            pp("here");
+            printf("%.*s\n", n, operation->data);
+
             break;
         case OP_RM:
             strcpy(operation->data, arg_ftp);  /* data */
