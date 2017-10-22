@@ -117,7 +117,17 @@ int write_file(char * file_name, char *data, int len){
 }
 
 int delete_file(char * file_name){
-    return 0;
+    int ret;
+    ret = remove(file_name);
+
+    if(ret == 0) {
+        printf("File deleted successfully");
+    }
+    else {
+        printf("Error: unable to delete the file");
+    }
+
+    return ret;
 }
 
 

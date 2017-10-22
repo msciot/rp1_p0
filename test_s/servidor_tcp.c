@@ -155,6 +155,7 @@ int process_server_op(struct appdata operation, struct appdata *result){
         case OP_GET: /* mayusculas */
                 result->op = htons(OP_RGET); /* op */
                 len = read_file(operation.data, buff);
+                printf("\n tengo esta longitud %d\n", len);
                 strcpy(result->data, buff);
                 result->len = htons(len); /* len */
                 error = 0;
@@ -163,7 +164,7 @@ int process_server_op(struct appdata operation, struct appdata *result){
 
                 result->op = htons(OP_RES); /* op */
                 len = 0;
-                pp("estoy en rm");
+                delete_file(operation.data);
                 result->len = htons(len); /* len */
                 error = 0;
 
