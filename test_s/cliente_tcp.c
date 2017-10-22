@@ -144,11 +144,7 @@ int process_client_op(struct appdata *operation, char *rop, char *arg_ftp){
             strcat(arg_ftp, read_buff);
             strcpy(operation->data, arg_ftp);
             len = strlen(operation->data);
-            int n = data(operation->data);
               /* print at most first three characters (safe) */
-            pp("here");
-            printf("%.*s\n", n, operation->data);
-
             break;
         case OP_RM:
             strcpy(operation->data, arg_ftp);  /* data */
@@ -169,7 +165,7 @@ int process_client_res(struct appdata response, char *aux){
     switch (response.op)
     {
         case OP_RPUT: /* minusculas */
-            pp("cliente put");
+            pp("file uploaded!");
             break;
         case OP_RGET: /* mayusculas */
             write_file(aux, response.data, response.len);

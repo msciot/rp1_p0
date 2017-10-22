@@ -137,22 +137,24 @@ int process_server_op(struct appdata operation, struct appdata *result){
     char buff[MAXDATASIZE-HEADER_LEN];
     int len;
     int error;
+    char *name;
 
     switch (operation.op)
     {
         case OP_PUT: /* minusculas */
                 result->op = htons(OP_RPUT); /* op */
+                int n = dpos(operation.data);
+                name = (char *)malloc(n);
+                parse_name(operation.data, name, n);
+                write_file(name, &(operation.data[++n]), operation.len - strlen(name));
                 len = 0;
-                pp("estoy en put");
                 result->len = htons(len); /* len */
                 error = 0;
 
                 break;
         case OP_GET: /* mayusculas */
-                pp("estoy en get");
                 result->op = htons(OP_RGET); /* op */
                 len = read_file(operation.data, buff);
-                printf("\n tengo esta longitud %d\n", len);
                 strcpy(result->data, buff);
                 result->len = htons(len); /* len */
                 error = 0;

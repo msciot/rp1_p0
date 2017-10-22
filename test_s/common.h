@@ -57,6 +57,7 @@ unsigned short cdata_to_op(char * cdata);
 char *op_to_cdata(unsigned short op);
 int read_file(char * file_name, char * output);
 int data(char *data);
+void parse_name(char *buff, char *name, int n);
 int write_file(char * file_name, char *data, int len);
 int delete_file(char * file_name);
 

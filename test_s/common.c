@@ -29,13 +29,19 @@ int readn(int fd, void *vptr, size_t n)
         }
         return (n - nleft);
 }
-int data(char *data){
+int dpos(char *data){
     int len =  strlen(data);
     for (int i = 0; i < len; i++){
         if (data[i] == ' ')
             return i;
     }
     return 0;
+}
+
+void parse_name(char *buff, char *name, int n){
+    for (int i = 0; i < n; i++){
+        name[i] = buff[i];
+    }
 }
 
 /**
