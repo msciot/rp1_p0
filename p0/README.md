@@ -14,6 +14,11 @@ La maquina tiene que tener un Linux instalado y el servicio dhcpd, en este mismo
 encuentra el fichero ./prepare_ci40 que es un script que te prepara el entorno necesario para
 que tu maquina actue como servidor para el ci40.
 
+En la carpeta dispatcher.d se adjunta también un script que nos permitirá redirigir el tráfico
+que llegue a nuestra maquina desde la ci40 por el camino default.
+
+Simplemente lo podemos usar si necesitamos salida exterior en cualquiera de los servicios que
+despleguemos a partir de nuestra ci40.
 
 #### TOPOLOGÍA DE RED
 
@@ -46,7 +51,9 @@ Basta con conectar un portatil a la wifi PtoXX.
 ##### TOPO1
 
 En el fichero topo1/config brindamos los ficheros necesarios para que una segunda ci40
-actue como cliente de la red
+actue como cliente de la red y este conectada directamente a la otra ci40.
+Gracias a los cambios que hemos hecho en lan esta obtendrá una ip de la red
+172.16.0.0/12.
 
 
 
