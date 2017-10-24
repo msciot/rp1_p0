@@ -20,6 +20,9 @@ que llegue a nuestra maquina desde la ci40 por el camino default.
 Simplemente lo podemos usar si necesitamos salida exterior en cualquiera de los servicios que
 despleguemos a partir de nuestra ci40.
 
+En nuestro caso hemos usado este script junto con NetworkManager para que se active en cuanto 
+nuestra interfaz que va a salir por default gateway este up
+
 #### TOPOLOGÍA DE RED
 
 Los ficheros de configuración OpenWRT necesarios para levantar la red se encuentran en net/config.
