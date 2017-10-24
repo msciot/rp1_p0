@@ -21,11 +21,11 @@ A partir de este punto supondremos que se han seguido las dos recomendaciones.
 
 Los 3 primero paquetes que quedan (21,22 y 23) corresponden al establecimiento de conexión TCP. 
 
-Las siguientes dos tramas (62 y 63) corresponden al envío e información de un fichero llamado prueba3 desde el cliente al servidor. El contenido de tal fichero es "prueba 3\n".
+Las siguientes dos tramas (62 y 63) corresponden al envío e información de un fichero llamado prueba3 desde el cliente al servidor. El contenido de tal fichero es "prueba 3\ n".
 
 Código de aplicación(response):
     
-    \000\002\000\020prueba3 prueba3\n
+    \000\002\000\020prueba3 prueba3\ n
 
 Los paquetes 124 y 125 y los 181 y 182 se corresponden con la petición y envío de los ficheros prueba1 y prueba análogos a prueba3.
 
