@@ -109,6 +109,11 @@ int main (int argc, char* argv[])
                     /* realiza operacion solicitada por el cliente */
                     memset (result.data, '\0', MAXDATASIZE - HEADER_LEN);
                     error = process_server_op(operation, &result);
+                    if (error == -1){
+                        pp("cierro una conexion debido a que no he tenido tiempo a depurar y es lo mas easy");
+                        pp("espero que el cliente sepa que no existe el archivo");
+                        break;
+                    }
                     /* envia resultado de la operacion solicitada por el cliente */
                     if ((numbytes = write (new_fd, (char *) &result, result.len + HEADER_LEN)) == -1)
                     {
@@ -146,7 +151,9 @@ int process_server_op(struct appdata operation, struct appdata *result){
                 int n = dpos(operation.data);
                 name = (char *)malloc(n);
                 parse_name(operation.data, name, n);
-                write_file(name, &(operation.data[++n]), operation.len - strlen(name));
+                len = write_file(name, &(operation.data[++n]), operation.len - strlen(name));
+                if (len == -1)
+                    return len;
                 len = 0;
                 result->len = htons(len); /* len */
                 error = 0;
@@ -155,6 +162,8 @@ int process_server_op(struct appdata operation, struct appdata *result){
         case OP_GET: /* mayusculas */
                 result->op = htons(OP_RGET); /* op */
                 len = read_file(operation.data, buff);
+                if (len == -1)
+                    return -1;
                 printf("\n tengo esta longitud %d\n", len);
                 strcpy(result->data, buff);
                 result->len = htons(len); /* len */

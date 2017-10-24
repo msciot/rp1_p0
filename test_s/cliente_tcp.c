@@ -21,6 +21,7 @@ int main (int argc, char *argv[])
         unsigned short op;
         int numbytes;                   /* numero de bytes recibidos o enviados */
         int len;
+        int err;
 
         /* obtiene parametros */
         if (argc != 2)
@@ -71,6 +72,8 @@ int main (int argc, char *argv[])
             //read from the stdin buffer, gets two pointers to char
             sscanf(send_buff,"%s %s", rop, ftp_argv);
             len = process_client_op(&operation ,rop, ftp_argv);
+            if (len == -1)
+                break;
 
             if ((numbytes = write (sockfd, (char *) &operation, len + HEADER_LEN)) == -1)
                     perror ("write");
@@ -117,7 +120,10 @@ int main (int argc, char *argv[])
                             "[res 0x%x longitud %d contenido %s]\n",
                             result.op, result.len, result.data);
 
-            process_client_res(result, ftp_argv);
+            err = process_client_res(result, ftp_argv);
+            if ( err == -1)
+                break;
+
         }
         /* cierra el socket */
         close (sockfd);
@@ -140,6 +146,8 @@ int process_client_op(struct appdata *operation, char *rop, char *arg_ftp){
             break;
         case OP_PUT:
             len = read_file(arg_ftp, read_buff);
+            if (len == -1)
+                return len;
             arg_ftp[strlen(arg_ftp)] = ' ';
             strcat(arg_ftp, read_buff);
             strcpy(operation->data, arg_ftp);
@@ -168,7 +176,7 @@ int process_client_res(struct appdata response, char *aux){
             pp("file uploaded!");
             break;
         case OP_RGET: /* mayusculas */
-            write_file(aux, response.data, response.len);
+            error = write_file(aux, response.data, response.len);
 
             break;
         case OP_RM: /* mayusculas */

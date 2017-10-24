@@ -88,6 +88,10 @@ int read_file(char * file_name, char *output){
         if (ferror(file))
             pp("ERROR READING FILE");
     }
+    else {
+        return -1;
+
+    }
     fclose(file);
     return size;
 }
@@ -112,6 +116,9 @@ int write_file(char * file_name, char *data, int len){
         if (ferror(file))
             pp("ERROR READING FILE");
     }
+    else
+        return -1;
+
     fclose(file);
     return size;
 }
