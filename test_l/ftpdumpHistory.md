@@ -23,5 +23,31 @@ Los 3 primero paquetes que quedan (21,22 y 23) corresponden al establecimiento d
 
 Las siguientes dos tramas (62 y 63) corresponden al envío e información de un fichero llamado prueba3 desde el cliente al servidor. El contenido de tal fichero es "prueba 3\n".
 
+Código de aplicación(response):
+    
+    \000\002\000\020prueba3 prueba3\n
+
+Los paquetes 124 y 125 y los 181 y 182 se corresponden con la petición y envío de los ficheros prueba1 y prueba análogos a prueba3.
+
+Código de aplicación(response):
+    
+    \000\001\000\aprueba1
+
+Código de aplicación(request):
+
+    \020\001\000\tprueba1\n
+    
+
+Los paquetes 244 y 245 al borrado del fichero prueba1.
+
+Código de aplicación(response):
+    
+    \000\003\000\aprueba1
+
+Código de aplicación(request):
+
+    \020\000\000\000
+
+
 La última trama (255) coresponde con el cierre activo por parte del cliente.
 
